@@ -627,6 +627,7 @@ dependencies = [
  "actix-web",
  "bluelib",
  "clap",
+ "os_info",
  "reqwest",
  "tokio",
 ]
@@ -942,6 +943,16 @@ dependencies = [
  "libc",
  "pkg-config",
  "vcpkg",
+]
+
+[[package]]
+name = "os_info"
+version = "3.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5209b2162b2c140df493a93689e04f8deab3a67634f5bc7a553c0a98e5b8d399"
+dependencies = [
+ "log",
+ "winapi",
 ]
 
 [[package]]

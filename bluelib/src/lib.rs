@@ -1,8 +1,7 @@
-
 pub enum Platform {
     WINDOWS,
     LINUX,
-    FREEBSD
+    FREEBSD,
 }
 
 #[cfg(target_os = "windows")]
@@ -17,5 +16,4 @@ pub fn get_platform() -> Platform {
 #[cfg(test)]
 mod tests {
     use super::*;
-
 }
