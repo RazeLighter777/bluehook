@@ -6,4 +6,5 @@ pub enum Capabilities {
     ChangeUserPassword,
     InstallFail2ban,
     ReadSyslog,
+    Docker,
 }

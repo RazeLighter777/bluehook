@@ -8,10 +8,14 @@ pub fn validate() -> bool {
     if !getuid().is_root() {
         eprintln!("Please run hook as root user");
         false
-    } else if os_info::get().os_type() != os_info::Type::Ubuntu || os_info::get().os_type() != os_info::Type::CentOS || os_info::get().os_type() != os_info::Type::Debian ||  os_info::get().os_type() != os_info::Type::Redhat {
-        eprintln!("Unsupported OS type {} ", os_info::get().os_type());
-        false
     } else {
-        true
+        match os_info::get().os_type() {
+            os_info::Type::Ubuntu
+            | os_info::Type::CentOS
+            | os_info::Type::Debian
+            | os_info::Type::Redhat
+            | os_info::Type::RedHatEnterprise => true,
+            _ => false,
+        }
     }
 }
