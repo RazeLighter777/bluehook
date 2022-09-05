@@ -1,33 +1,23 @@
-use std::fs::OpenOptions;
 use std::io::Write;
+use std::{fs::OpenOptions, io};
 
-use actix_web::{post, web, Responder};
+use rocket::form::Form;
+use rocket::{post, FromForm, Request};
 use serde::Deserialize;
-
-#[derive(Deserialize)]
-struct SshFormData {
+#[derive(FromForm)]
+pub struct SshFormData {
     pub key: String,
 }
 
-pub fn install_ssh_key(key: &str, user: &str) -> bool {
-    match OpenOptions::new()
+pub fn install_ssh_key(key: &str, user: &str) -> io::Result<()> {
+    let mut file = OpenOptions::new()
         .append(true)
         .create(true)
-        .open(format!("/home/{user}/.ssh/authorized_keys"))
-    {
-        Ok(mut file) => match writeln!(file, "{}", key) {
-            Ok(_) => true,
-            Err(_) => false,
-        },
-        Err(e) => false,
-    }
+        .open(format!("/home/{user}/.ssh/authorized_keys"))?;
+    return writeln!(file, "{}", key);
 }
 
-#[post("/{user}/ssh")]
-async fn ssh_route(path: web::Path<(String,)>, form: web::Form<SshFormData>) -> impl Responder {
-    if install_ssh_key(&form.key, &path.0) {
-        "good"
-    } else {
-        "fail"
-    }
+#[post("/<user>/ssh", data = "<key>")]
+pub fn ssh_route(user: String, key: Form<SshFormData>) -> String {
+    "good".to_owned()
 }

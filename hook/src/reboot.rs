@@ -1,5 +1,7 @@
-use actix_web::{get, Responder};
+use rocket::post;
 use system_shutdown::{self, ShutdownResult};
+
+use crate::auth::Auth;
 
 //use cross platform library to reboot on linux and windows.
 #[cfg(target_os = "linux")]
@@ -16,8 +18,8 @@ pub fn reboot() -> ShutdownResult {
     nix::sys::reboot::reboot(nix::sys::reboot::RebootMode::RB_AUTOBOOT).unwrap();
     return ShutdownResult::Ok(());
 }
-#[get("/reboot")]
-pub async fn reboot_route() -> impl Responder {
+#[post("/reboot")]
+pub async fn reboot_route(auth : Auth) -> String {
     tokio::spawn(async move {
         tokio::time::sleep(std::time::Duration::from_secs(3)).await;
         reboot()
