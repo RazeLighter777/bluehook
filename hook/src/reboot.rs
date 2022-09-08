@@ -19,7 +19,7 @@ pub fn reboot() -> ShutdownResult {
     return ShutdownResult::Ok(());
 }
 #[post("/reboot")]
-pub async fn reboot_route(auth : Auth) -> String {
+pub async fn reboot_route(auth: Auth) -> String {
     tokio::spawn(async move {
         tokio::time::sleep(std::time::Duration::from_secs(3)).await;
         reboot()

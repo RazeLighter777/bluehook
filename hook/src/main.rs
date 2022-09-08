@@ -1,8 +1,8 @@
 use clap::Parser;
+use serde_json::json;
 
 use crate::sysinfo::user_list_route;
 use crate::{
-    auth::do_password_thing,
     fail2ban::fail2ban_route,
     firewall::firewall_status,
     log::{authlog_alert_matcher, monitor_logfile, setup_log_monitors},
@@ -10,6 +10,8 @@ use crate::{
     software::install_recommended_software,
     ssh::ssh_route,
 };
+use base64::{decode, encode};
+
 mod alerts;
 mod args;
 mod auth;
@@ -28,7 +30,7 @@ extern crate rocket;
 
 #[launch]
 async fn rocket() -> _ {
-    do_password_thing();
+    //do_password_thing();
     let (tx, mut rx) = tokio::sync::mpsc::channel(32);
     setup_log_monitors(tx);
     tokio::spawn(async move {
@@ -48,6 +50,21 @@ async fn rocket() -> _ {
         eprintln!("WARNING : Platform validation failed");
     }
     let opts = args::Args::parse();
+    //print the password
+    if !auth::does_passwordfile_exist() {
+        let pwd = auth::write_password_file().expect("Could not write the password file");
+        let x = json!({
+            "password" : pwd,
+            "ip" : opts.ip_address,
+            "port" : opts.bind_port,
+
+        });
+        let secret = base64::encode(x.to_string());
+        println!(
+            "ENTER THIS ONE TIME CODE IN THE COMMANDER DASHBOARD : {}",
+            secret
+        );
+    }
     if opts.install_recommended_software {
         tokio::spawn(async {
             install_recommended_software();

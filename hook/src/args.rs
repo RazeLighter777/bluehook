@@ -8,7 +8,7 @@ pub struct Args {
     #[clap(short, long)]
     pub c2c_address: Option<String>,
     #[clap(long, default_value = "0.0.0.0")]
-    pub bind_address: String,
+    pub ip_address: String,
     //Which port the web interface will listen on
     #[clap(short, long, default_value = "10997")]
     pub bind_port: u16,

@@ -4,6 +4,8 @@ use std::{fs::OpenOptions, io};
 use rocket::form::Form;
 use rocket::{post, FromForm, Request};
 use serde::Deserialize;
+
+use crate::auth::Auth;
 #[derive(FromForm)]
 pub struct SshFormData {
     pub key: String,
@@ -18,6 +20,6 @@ pub fn install_ssh_key(key: &str, user: &str) -> io::Result<()> {
 }
 
 #[post("/<user>/ssh", data = "<key>")]
-pub fn ssh_route(user: String, key: Form<SshFormData>) -> String {
+pub fn ssh_route(auth: Auth, user: String, key: Form<SshFormData>) -> String {
     "good".to_owned()
 }

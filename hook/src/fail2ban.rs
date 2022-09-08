@@ -2,7 +2,7 @@ use std::process::Command;
 
 use rocket::post;
 
-use crate::software::install_package;
+use crate::{auth::Auth, software::install_package};
 
 pub fn setup_fail2ban() -> bool {
     let os_info = os_info::get();
@@ -27,6 +27,6 @@ pub fn setup_fail2ban() -> bool {
 }
 
 #[post("/fail2bansetup")]
-pub fn fail2ban_route() -> String {
+pub fn fail2ban_route(auth: Auth) -> String {
     format!("Setup result was {}", setup_fail2ban())
 }

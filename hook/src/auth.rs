@@ -1,3 +1,4 @@
+use pwhash;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use rocket::{
@@ -6,7 +7,6 @@ use rocket::{
     Data, Request,
 };
 use std::io::Write;
-use pwhash;
 use std::{fs, hash::Hash, path::Path};
 
 use rocket::http::{ContentType, Method, Status};
@@ -27,16 +27,17 @@ impl<'r> FromRequest<'r> for Auth {
                     if res {
                         request::Outcome::Success(Auth {})
                     } else {
-                        request::Outcome::Failure((rocket::http::Status::Unauthorized, AuthError {}))
+                        request::Outcome::Failure((
+                            rocket::http::Status::Unauthorized,
+                            AuthError {},
+                        ))
                     }
                 } else {
                     println!("Did not verify");
                     request::Outcome::Failure((rocket::http::Status::Unauthorized, AuthError {}))
                 }
-            },
-            None => {
-                request::Outcome::Failure((rocket::http::Status::Unauthorized, AuthError {}))
-            },
+            }
+            None => request::Outcome::Failure((rocket::http::Status::Unauthorized, AuthError {})),
         }
     }
 }
@@ -65,18 +66,4 @@ pub fn does_passwordfile_exist() -> bool {
 pub fn verify_password(pass: &str) -> std::io::Result<bool> {
     let s = &fs::read_to_string("./.bluehook_password_hash")?;
     Ok(pwhash::bcrypt::verify(pass, s))
-}
-
-pub fn do_password_thing() {
-    if does_passwordfile_exist() {
-    } else {
-        match write_password_file() {
-            Ok(s) => {
-                println!("SYSTEM PASSWORD IS {}, WILL NOT BE WRITTEN AGAIN: ", s);
-            }
-            Err(e) => {
-                eprintln!("COULD NOT WRITE TO SYSTEM PASSWORD FILE, error {} ", e);
-            }
-        }
-    }
 }

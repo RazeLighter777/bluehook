@@ -25,7 +25,7 @@ fn get_users() -> Vec<String> {
 }
 
 #[post("/users")]
-pub fn user_list_route(auth : Auth) -> String {
+pub fn user_list_route(auth: Auth) -> String {
     let mut res = String::new();
     for user in get_users() {
         res = res + &user + "\n";

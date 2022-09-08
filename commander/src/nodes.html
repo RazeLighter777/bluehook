@@ -1,0 +1,31 @@
+<form>
+    <div class="form-group">
+      <label for="nodeinput">Add a new node</label>
+      <input type="password" class="form-control" id="nodeinput" aria-describedby="nodehelp" placeholder="Enter the base64 encoded node information here">
+      <small id="nodehelp" class="form-text text-muted">Adds a new node to the commander system.</small>
+    </div>
+    <button type="submit" class="btn btn-primary" onclick ="addNode()">Submit</button>
+</form>
+<h3>Nodes</h3>
+<table class="table" id="node-id">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Host</th>
+        <th scope="col">Type</th>
+        <th scope="col">Manage</th>
+      </tr>
+    </thead>
+    <tbody id = "nodelist">
+      <tr>
+        <th scope="row">1</th>
+        <td>192.168.1.54</td>
+        <td>CentOS</td>
+        <td><button>Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+<script>
+    console.log("bullshit")
+
+</script>

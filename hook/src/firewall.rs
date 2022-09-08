@@ -2,6 +2,8 @@ use std::process::Command;
 
 use rocket::post;
 
+use crate::auth::Auth;
+
 pub fn is_firewall_enabled() -> bool {
     match os_info::get().os_type() {
         os_info::Type::Ubuntu => {
@@ -23,6 +25,6 @@ pub fn is_firewall_enabled() -> bool {
 }
 
 #[post("/firewallstatus")]
-pub fn firewall_status() -> String {
+pub fn firewall_status(auth: Auth) -> String {
     format!("Firewall status is {}", is_firewall_enabled())
 }
